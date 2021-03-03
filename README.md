@@ -507,4 +507,12 @@ url = forms.URLField()
 ```
 - This shows we can customize the forms. Lets go back to normal and keep things simple.
 ### Spicing up forms with CSS
-- 
+- Use bootstrap to shine our site.
+- Need to install someting, turn back to terminal, stop server and instal:
+```py
+pip install django-widget-tweaks
+python manage.py runserver
+```
+- Add widget-tweeks to the installed apps on settings.py
+- Go to https://getbootstrap.com/ and click get started button, scroll down and copy starter template.
+- Go to order.html, paste starter template at the top, copy existing code to the body.
