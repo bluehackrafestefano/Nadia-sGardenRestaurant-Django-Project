@@ -26,5 +26,16 @@
         </select> -->
         <input type="submit" value="Order Pizza">
     </form>
+
+    <br><br>
+
+    Want more than one pizza?
+
+    <form action="{% url 'pizzas' %}", method="GET">
+        {{ multiple_form }}
+        <input type="submit" value="Get Pizzas">
+    </form>
+
+
 </body>
 </html>

@@ -319,3 +319,83 @@ filled_form = PizzaForm(request.POST, request.FILES)
 ```
 - We didnt save the files but ready to do that.
 - First go back to normal, erase request.FILES from views, and image = forms.ImageField() from forms.py, and enctype="multipart/form-data" from order.html. We turned back to normal.
+### From Sets
+- Repeat one form again and again with form sets. Customer wants to order multiple pizzas at once.
+- Modify order.html, add after the first form element the secong multiple form:
+```html
+<br><br>
+
+Want more than one pizza?
+
+<form action="{% url 'pizzas' %}", method="GET">
+    {{ multiple_form }}
+    <input type="submit" value="Get Pizzas">
+</form>
+```
+- add a url path named 'pizzas':
+```py
+path('pizzas', views.pizzas, name='pizzas'),
+```
+- Go to the forms.py and create a new class:
+```py
+class MultiplePizzaForm(forms.Form):
+    number = forms.IntegerField(min_value=2, max_value=6)
+```
+- Than switch to views.py and import MultiplePizzaForm, then modify the order function with:
+```py
+multiple_form = MultiplePizzaForm()
+return render(request, 'pizza/order.html', {'pizzaform':new_form, 'note':note, 'multiple_form':multiple_form})
+return render(request, 'pizza/order.html', {'pizzaform':form, 'multiple_form':multiple_form})
+```
+- Next step create a function for the pizza view:
+```py
+from django.forms import formset_factory
+def pizzas(request):
+    number_of_pizzas = 2
+    filled_multiple_pizza_form = MultiplePizzaForm(request.GET)
+    if filled_multiple_pizza_form.is_valid():
+        number_of_pizzas = filled_multiple_pizza_form.cleaned_data['number']
+    PizzaFormSet = formset_factory(PizzaForm, extra=number_of_pizzas)
+    formset = PizzaFormSet()
+    if request.method == "POST":
+        filled_formset = PizzaFormSet(request.POST)
+        if(filled_formset.is_valid()):
+            for form in filled_formset:
+                print(form.cleaned_data['topping1'])
+            note = 'Pizzas have been ordered!'
+        else:
+            note = 'Order was not created, please try again'
+
+
+        return render(request, 'pizza/pizzas.html', {'note':note, 'formset':formset})
+    else:
+        return render(request, 'pizza/pizzas.html', {'formset':formset})
+```
+- Now we need a new template of pizza.html
+```html
+<h1>Order Pizzas</h1>
+
+
+<h2>{{ note }}</h2>
+
+
+<form action="{% url 'pizzas' %}" method="POST">
+  {% csrf_token %}
+    {{ formset.management_form }}
+
+
+    {% for form in formset %}
+      {{ form }}
+      <br><br>
+    {% endfor %}
+    <input type="submit" value="Order Pizzas" />
+  </form>
+```
+- Now we have a multiple pizza order page. 
+### Save the orders to the Database
+- Add a small piece of code to views.py
+```py
+filled_form.save()
+```
+- Check if its saving the order or not by typing an order and looking to the admin panel.
+- User may need to edit the order.
