@@ -491,3 +491,20 @@ url = forms.URLField()
 ```html
 <ul>{{ pizzaform.as_ul }}</ul>
 ```
+- Now lets turn back to normal and continue the project.
+### Customizing Forms:
+- You can customize field by field, for example lets modify topping1 on order.html:
+```html
+{{ pizzaform.topping1.label_tag }}
+{{ pizzaform.topping1 }}
+{{ pizzaform.topping1.errors }}
+{{ pizzaform.topping2.label_tag }}
+{{ pizzaform.topping2 }}
+{{ pizzaform.topping2.errors }}
+<label for="{{ pizzaform.size.id_for_label }}">Size:</label>
+{{ pizzaform.size }}
+{{ pizzaform.size.errors }}
+```
+- This shows we can customize the forms. Lets go back to normal and keep things simple.
+### Spicing up forms with CSS
+- 
