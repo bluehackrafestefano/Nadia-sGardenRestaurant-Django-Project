@@ -395,7 +395,63 @@ def pizzas(request):
 ### Save the orders to the Database
 - Add a small piece of code to views.py
 ```py
-filled_form.save()
+created_pizza = filled_form.save()
 ```
 - Check if its saving the order or not by typing an order and looking to the admin panel.
 - User may need to edit the order.
+- Go to the urls.py and add a new path for editing the order:
+```py
+path('order/<int:pk>', views.edit_order, name='edit_order'),
+```
+- Time to edit views.py and add a new function for editing the order.
+```py
+from .models import Pizza
+created_pizza_pk = created_pizza.id
+return render(request, 'pizza/order.html', {'created_pizza_pk':created_pizza_pk, 'pizzaform':new_form, 'note':note, 'multiple_form':multiple_form})
+def edit_order(request, pk):
+    pizza = Pizza.objects.get(pk=pk)
+    form = PizzaForm(instance=pizza)
+    if request.method == 'POST':
+        filled_form = PizzaForm(request.POST,instance=pizza)
+        if filled_form.is_valid():
+            filled_form.save()
+            form = filled_form
+    return render(request, 'pizza/edit_order.html', {'pizzaform':form,'pizza':pizza})
+```
+- Now lets modify the order.html so that user can edit the order:
+```html
+<h2>{{ note }}</h2>
+    {% if created_pizza_pk %}
+    <h2><a href="{% url 'edit_order' created_pizza_pk %}">Edit Your Order</a></h2>
+    {% endif %}
+```
+- And create edit_order.html:
+```html
+<h1>Edit Order</h1>
+
+<h2>{{ note }}</h2>
+
+<form action="{% url 'edit_order' pizza.id %}" method="post">
+    {% csrf_token %}
+    {{ pizzaform }}
+    <input type="submit" value="Edit Order">
+</form>
+```
+- Customers want to know if they are modified the order or not. So add a note by adding views.py:
+```py
+note = 'Order has been updated.'
+return render(request, 'pizza/edit_order.html', {'note':note, 'pizzaform':form,'pizza':pizza})
+```
+### Quiz:
+- Formsets are good to use if you want a form for only one object.
+TRUE
+FALSE *
+- In order to accept files in a form, what must you add to the form?
+enctype="multipart/form-data" *
+accept="files"
+yesform
+data="files
+- ModelForm allows you to create forms from your existing models.
+TRUE *
+FALSE
+##

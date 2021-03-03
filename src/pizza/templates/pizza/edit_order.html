@@ -1,0 +1,9 @@
+<h1>Edit Order</h1>
+
+<h2>{{ note }}</h2>  <!-- This is note to the customer that the order is being editted-->
+
+<form action="{% url 'edit_order' pizza.id %}" method="post">
+    {% csrf_token %}
+    {{ pizzaform }}
+    <input type="submit" value="Edit Order">
+</form>

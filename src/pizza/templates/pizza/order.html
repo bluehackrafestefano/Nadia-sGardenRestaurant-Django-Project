@@ -9,6 +9,9 @@
     <h1>Order a pizza</h1>
 
     <h2>{{ note }}</h2>
+    {% if created_pizza_pk %}
+    <h2><a href="{% url 'edit_order' created_pizza_pk %}">Edit Your Order</a></h2>
+    {% endif %}
 
     <!-- <form enctype="multipart/form-data" action="{% url 'order' %}" method="POST"> -->
     <form action="{% url 'order' %}" method="POST">
