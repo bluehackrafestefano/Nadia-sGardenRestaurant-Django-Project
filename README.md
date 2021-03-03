@@ -295,3 +295,27 @@ class PizzaForm(forms.ModelForm):
 ```py
 size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
 ```
+### Accept files from user
+- This can be possible via forms. Go to order.html, modify form element and add enctype.
+- When the value of the method attribute is post, enctype is the MIME type of content that is used to submit the form to the server. Possible values are:
+    * application/x-www-form-urlencoded: The default value if the attribute is not specified.
+    * multipart/form-data: The value used for an <input> element with the type attribute set to "file".
+    * text/plain: (HTML5)
+This value can be overridden by a formenctype
+```html
+<form enctype="multipart/form-data" action="{% url 'order' %}" method="POST">
+```
+- Need to install pillow, cd .. and then activate environment and:
+```py
+pip install pillow
+```
+- Modify forms:
+```py
+image = forms.ImageField()
+```
+- We are not ready to accept files. Need to modify views.py:
+```py
+filled_form = PizzaForm(request.POST, request.FILES)
+```
+- We didnt save the files but ready to do that.
+- First go back to normal, erase request.FILES from views, and image = forms.ImageField() from forms.py, and enctype="multipart/form-data" from order.html. We turned back to normal.
