@@ -96,4 +96,19 @@ def order(request):
 ```py
 python manage.py runserver
 ```
-- Modify order.html, add form, customize it:
+- Modify order.html, add form:
+```html
+<form>
+    <label for="topping1">Topping 1: </label>
+    <input id="topping1" type="text" name="topping1">
+    <label for="topping2">Topping 2: </label>
+    <input id="topping2" type="text" name="topping2">
+    <label for="size">Size: </label>
+    <select name="sizse" id="size">
+        <option value="Small">Small</option>
+        <option value="Medium">Medium</option>
+        <option value="Large">Large</option>
+    </select>
+</form>
+```
+- Added a simple form for selecting toppings and size. Lets add an order button.
