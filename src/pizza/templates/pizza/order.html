@@ -7,7 +7,8 @@
 </head>
 <body>
     <h1>Order a pizza</h1>
-    <form>
+    <form action="{% url 'order' %}" method="POST">
+        {% csrf_token %}
         <label for="topping1">Topping 1: </label>
         <input id="topping1" type="text" name="topping1">
         <label for="topping2">Topping 2: </label>
@@ -18,6 +19,7 @@
             <option value="Medium">Medium</option>
             <option value="Large">Large</option>
         </select>
+        <input type="submit" value="Order Pizza">
     </form>
 </body>
 </html>

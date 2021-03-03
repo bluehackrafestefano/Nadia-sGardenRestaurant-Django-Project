@@ -112,3 +112,15 @@ python manage.py runserver
 </form>
 ```
 - Added a simple form for selecting toppings and size. Lets add an order button.
+```html
+<input type="submit" value="Order Pizza">
+```
+- When you click "Order Pizza" button some interesting text show up here in the top.
+- Add action to form to specify where to send these form.
+<form action="{% url 'order' %}" method="GET">
+- When its a get request the change can be seen on url.
+- POST method is more appropiate for us.
+<form action="{% url 'order' %}" method="POST">
+- Enter some selections and click order pizza, and it gives error: CSRF verification failed. Request aborted.
+- Get rid of this by adding the firs line of our form:
+{% csrf_token %}
