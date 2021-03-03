@@ -454,4 +454,30 @@ data="files
 - ModelForm allows you to create forms from your existing models.
 TRUE *
 FALSE
-##
+## Local validation
+- Create an email and url validation. Go to forms.py and add:
+```py
+email = forms.EmailField()
+url = forms.URLField()
+```
+- Customer need to enter valid email or url. If you dont wanna local validation to to order.html and add to form:
+```html
+<form action="{% url 'order' %}" method="POST" novalidate>
+```
+- novalidate Boolean attribute indicates that the form is not to be validated when submitted. If this attribute is not specified (and therefore the form is validated), this default setting can be overridden by a formnovalidate attribute on a \<button> or \<input> element belonging to the form.
+### Server side errors
+- If the customer make a post request and this is not valid there must be some feedback:
+```py
+    # new_form = PizzaForm()
+    filled_form = PizzaForm()
+    # return render(request, 'pizza/order.html', {'created_pizza_pk':created_pizza_pk, 'pizzaform':new_form, 'note':note, 'multiple_form':multiple_form})
+        else:
+            created_pizza_pk = None
+            note = 'Pizza order failded, try again!'
+        return render(request, 'pizza/order.html', {'created_pizza_pk':created_pizza_pk, 'pizzaform':filled_form, 'note':note, 'multiple_form':multiple_form})
+```
+- Now you can add novalidate to the order.html again.
+```html
+<form action="{% url 'order' %}" method="POST" novalidate>
+```
+- 
