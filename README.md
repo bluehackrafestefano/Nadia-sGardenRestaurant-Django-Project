@@ -243,5 +243,55 @@ class PizzaForm(forms.ModelForm):
 labels = {'topping1':'Topping 1', 'topping2':'Topping 2'}
 ```
 - You can do any specific change, dive deep into forms! Use widgets!
+- Bring back the first version of the forms:
+```py
+topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.Textarea)
+```
+- With Textarea we can see a bigger box.
+```py
+topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.PasswordInput)
+```
+- With PasswordInput the text user typed will be hidden.
+- Also we can get rid of toppings and make a multiple choice toppings list can be selected:
+```py
+# This is the third version:
+class PizzaForm(forms.Form):
+    # topping1 = forms.CharField(label='Topping 1', max_length=100, widget=forms.PasswordInput)
+    # topping2 = forms.CharField(label='Topping 2', max_length=100)
+    toppings = forms.MultipleChoiceField(choices=[('pep', 'Pepperoni'), ('cheese', 'Cheese'), ('olives', 'Olives')])
+    size = forms.ChoiceField(label='Size', choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
+```
+- This is cool but user cant select multiple bcoz they cant know Ctrl + click to select. So need to add something extra:
+```py
+toppings = forms.MultipleChoiceField(choices=[('pep', 'Pepperoni'), ('cheese', 'Cheese'), ('olives', 'Olives')], widget=forms.CheckboxSelectMultiple)
+```
+- Widget can be added not only regular form but also can be used with model form:
+```py
+# This is the fourth version:
+class PizzaForm(forms.ModelForm):
+    class Meta:
+        model = Pizza
+        fields = ['topping1', 'topping2', 'size']
+        labels = {'topping1':'Topping 1', 'topping2':'Topping 2'}
+        widgets = {'topping1':forms.Textarea, 'size':forms.CheckboxSelectMultiple}
+```
+- With Textarea widget, we can see a bigger box. And select multiple choice size.
+```py
+from django import forms
+from .models import Pizza, Size
 
-
+# This is the fourth version:
+class PizzaForm(forms.ModelForm):
+    
+    # This is our change, dont wanna empty label, good to see multiple choice check box widget
+    size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.CheckboxSelectMultiple)
+    
+    class Meta:
+        model = Pizza
+        fields = ['topping1', 'topping2', 'size']
+        labels = {'topping1':'Topping 1', 'topping2':'Topping 2'}
+```
+- Need modification because dont want customer to select more than one size on one order!
+```py
+size = forms.ModelChoiceField(queryset=Size.objects, empty_label=None, widget=forms.RadioSelect)
+```
