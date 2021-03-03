@@ -188,4 +188,36 @@ def order(request):
 ```html
 <h2>{{ note }}</h2>
 ```
-- 
+## Need to create a model to keep order info
+- Open models.py
+- Create classes for size of the pizza, toppings, and make some relation to Size and others:
+```html
+class Size(models.Model):
+    title = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.title  # This is for good visual experimentation!
+
+class Pizza(models.Model):
+    topping1 = models.CharField(max_length=100)
+    topping2 = models.CharField(max_length=100)
+    size = models.ForeignKey(Size, on_delete=models.CASCADE)  # This is for correlation to the Size class
+```
+- We want these two newly created class to be shown on admin panel. So, modify the admin.py:
+```py
+from .models import Pizza, Size
+
+admin.site.register(Pizza)
+admin.site.register(Size)
+```
+- After these modifications, need to migrate them!
+```py
+python manage.py makemigrations
+python manage.py migrate
+```
+- Need a superuser to enter admin page:
+```py
+python manage.py createsuperuser
+```
+- Run the server and go to admin page.
+- Create sizes, user cant do that, admin must create them.
