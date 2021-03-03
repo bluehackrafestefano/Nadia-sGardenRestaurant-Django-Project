@@ -221,3 +221,27 @@ python manage.py createsuperuser
 ```
 - Run the server and go to admin page.
 - Create sizes, user cant do that, admin must create them.
+### Modify forms according to models
+- Since we have new models, lets update forms accordingly, things will be easier.
+```py
+from django import forms
+from .models import Pizza
+
+# class PizzaForm(forms.Form):
+#     topping1 = forms.CharField(label='Topping 1', max_length=100)
+#     topping2 = forms.CharField(label='Topping 2', max_length=100)
+#     size = forms.ChoiceField(label='Size', choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
+
+class PizzaForm(forms.ModelForm):
+    class Meta:
+        model = Pizza
+        fields = ['topping1', 'topping2', 'size']
+```
+- Look at the order page and you'll see the exact same page! With very simple code.
+- We can add labels to our form to see better text on the page:
+```py
+labels = {'topping1':'Topping 1', 'topping2':'Topping 2'}
+```
+- You can do any specific change, dive deep into forms! Use widgets!
+
+
