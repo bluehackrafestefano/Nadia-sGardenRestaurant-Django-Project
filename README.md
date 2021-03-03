@@ -476,8 +476,18 @@ url = forms.URLField()
             note = 'Pizza order failded, try again!'
         return render(request, 'pizza/order.html', {'created_pizza_pk':created_pizza_pk, 'pizzaform':filled_form, 'note':note, 'multiple_form':multiple_form})
 ```
-- Now you can add novalidate to the order.html again.
+### Form Rendering
+- Sometimes you may want to change the view of the original form.
+- Go to order.html and add:
 ```html
-<form action="{% url 'order' %}" method="POST" novalidate>
+{{ pizzaform.as_p }}
 ```
-- 
+- as_p makes it paragraph looking.
+- try as_table:
+```html
+<table>{{ pizzaform.as_table }}</table>
+```
+- or try as_ul:
+```html
+<ul>{{ pizzaform.as_ul }}</ul>
+```
