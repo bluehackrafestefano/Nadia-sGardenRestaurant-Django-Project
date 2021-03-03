@@ -117,10 +117,75 @@ python manage.py runserver
 ```
 - When you click "Order Pizza" button some interesting text show up here in the top.
 - Add action to form to specify where to send these form.
+```html
 <form action="{% url 'order' %}" method="GET">
+```
 - When its a get request the change can be seen on url.
 - POST method is more appropiate for us.
+```html
 <form action="{% url 'order' %}" method="POST">
+```
 - Enter some selections and click order pizza, and it gives error: CSRF verification failed. Request aborted.
 - Get rid of this by adding the firs line of our form:
+```html
 {% csrf_token %}
+```
+### Adding forms:
+- There is better and siple way to create order page. Add forms to the project. Create forms.py under pizza dir.
+```py
+from django import forms
+
+class PizzaForm(forms.Form):
+    topping1 = forms.CharField(label='Topping 1', max_length=100)
+    topping2 = forms.CharField(label='Topping 2', max_length=100)
+    size = forms.ChoiceField(label='Size', choices=[('Small', 'Small'), ('Medium', 'Medium'), ('Large', 'Large')])
+```
+- Now we have new class PizzaForm, return to views.py and modify the order function.
+```py
+from .forms import PizzaForm
+def order(request):
+    form = PizzaForm()
+    return render(request, 'pizza/order.html', {'pizzaform':form})
+```
+- No we don't need manually created labels and selections inside order.html, comment out this part. Just add {{ pizzaform }} to place our PizzaForm class form here:
+```html
+{{ pizzaform }}
+<!-- <label for="topping1">Topping 1: </label>
+<input id="topping1" type="text" name="topping1">
+<label for="topping2">Topping 2: </label>
+<input id="topping2" type="text" name="topping2">
+<label for="size">Size: </label>
+<select name="sizse" id="size">
+    <option value="Small">Small</option>
+    <option value="Medium">Medium</option>
+    <option value="Large">Large</option>
+</select> -->
+```
+- Result is more clean code!
+### Capture the order
+- In the views.py we can modify order function to distinguish bw get and post requests.
+```py
+from django.shortcuts import render
+from .forms import PizzaForm  # referring to newly created forms.py and our new PizzaForm
+
+def home(request):
+    return render(request, 'pizza/home.html')
+
+def order(request):
+    if request.method == 'POST':
+        filled_form = PizzaForm(request.POST)
+        if filled_form.is_valid():
+            note = 'Thanks for ordering! Your %s, %s and %s pizza is on its way!' %(filled_form.cleaned_data['size'], 
+                                                                                    filled_form.cleaned_data['topping1'], 
+                                                                                    filled_form.cleaned_data['topping2'],)
+            new_form = PizzaForm()
+            return render(request, 'pizza/order.html', {'pizzaform':new_form, 'note':note})
+    else:
+        form = PizzaForm()
+        return render(request, 'pizza/order.html', {'pizzaform':form})
+```
+- Need to modify order.html accordingly, to see the thanks note in the page, add the script below:
+```html
+<h2>{{ note }}</h2>
+```
+- 
