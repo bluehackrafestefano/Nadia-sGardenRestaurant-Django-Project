@@ -6,6 +6,10 @@
     <title>Nadia's Garden</title>
 </head>
 <body>
+    <div class="text-center">
+        {% load static %}
+        <img src="{% static 'nandiasgarden.jpg' %}" class="img-fluid" alt="Nandia's Garden">
+      </div>
     <h1>Nadia's Garden</h1>
     <a href="{% url 'order' %}">Order a pizza</a>
 </body>

@@ -516,3 +516,75 @@ python manage.py runserver
 - Add widget-tweeks to the installed apps on settings.py
 - Go to https://getbootstrap.com/ and click get started button, scroll down and copy starter template.
 - Go to order.html, paste starter template at the top, copy existing code to the body.
+### Creating a base.html as a template
+- We would like to implement styling to every page. So lets create a core html page. 
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <title>Nandia's Garden</title>
+  </head>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #238a44">
+    <div class="container">
+      <a class="navbar-brand" href="{% url 'home' %}">Nandia's Garden</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="{% url 'order' %}">Order Pizza</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <body>
+    {% block 'body' %}
+    {% endblock %}
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
+</html>
+```
+- Simply we copied the framework and paste here, added body block, and added navbar
+- To make it effective for other pages, add:
+{% extends 'pizza/base.html' %}
+{% block 'body' %}
+- to the top and:
+{% endblock %}
+to the bottom
+- Continue to add the base template to every page of our website! Dont forget adding div.
+### Add an image to the home page
+- add to the home page ab image:
+<div class="text-center">
+  {% load static %}
+  <img src="{% static 'nandiasgarden.jpg' %}" class="img-fluid" alt="Nandia's Garden">
+</div>
+- modify settings.py to show static fies root and add:
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+- inside pizza dir, create a new folder named static
+- put your images here
+python manage.py collectstatic
+- add to the home page
+{% load static %}
+- Modify the source of the image as {% static 'nandiasgarden.jpg %}
+### Quiz:
+- The proper way to show the errors for one field in a form is form.field.errors.
+TRUE *
+FALSE
+- How do you display a form in paragraph tags?
+.as_paragraph
+.as_p *
+.as_table
+.as_ul
